@@ -8,7 +8,7 @@ cursor = conn.cursor()
 cursor.execute('create table user(id int(20) primary key, name varchar(20), age varchar(20))')
 cursor.execute('insert into user(id, name, age) values (%s, %s, %s)', ['1', 'xiaoming', '18']) # 插入一条数据
 
-cursor.executemany('insert into user(id, name, age) values (%s, %s, %s)', (    # 插入多条数据
+cursor.executemany('insert into user(id, name, age) values (%s, %s, %s)', (  # 插入多条数据
     ('1', 'xioaming', '18'),
     ('2', 'zhangsan', '19'),
     ('3', 'xioali', '20'),
@@ -45,8 +45,6 @@ cursor.execute('delete from user where id=\'1\'')
 cursor.close()
 conn.commit()
 conn.close()
-
-
 
 
 
