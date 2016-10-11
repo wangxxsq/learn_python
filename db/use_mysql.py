@@ -1,59 +1,56 @@
-# encoding:utf8
-# Python使用ORM框架操作数据库
-from sqlalchemy import Column, Integer, String, create_engine
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.ext.declarative import declarative_base
+# 使用数据库MYSQL
+import mysql.connector
 
-
-Base = declarative_base()
-
-
-class User(Base):
-
-    """
-    CREATE TABLE purus.operation_log (
-      id       int             NOT NULL AUTO_INCREMENT,
-      name    varchar(20)      NOT NULL,
-      age     varchar(100)     NOT NULL,
-      PRIMARY KEY (id)
-    ) DEFAULT CHARSET=utf8;
-    """
-    __tablename__ = 'user'  # 表名
-
-    id = Column(Integer, primary_key=True)  # 表结构
-    name = Column(String)
-    age = Column(String)
-
-
-engine = create_engine('mysql+mysqlconnector://root:11111@localhost:3306/test')  # 初始化数据库连接:
-DB_Session = sessionmaker(bind=engine)  # 创建DBSession类型:
+conn = mysql.connector.connect(user='root', password='11111', database='test')
 
 # 增
-session = DB_Session()  # 创建session对象:
-user = User(id='1', name='xilming', age='18')  # 创建新User对象:
-session.add(user)  # 添加到session:
-session.commit()  # 提交即保存到数据库:
-session.close()  # 关闭session:
+cursor = conn.cursor()
+cursor.execute('create table user(id int(20) primary key, name varchar(20), age varchar(20))')
+cursor.execute('insert into user(id, name, age) values (%s, %s, %s)', ['1', 'xiaoming', '18']) # 插入一条数据
 
+cursor.executemany('insert into user(id, name, age) values (%s, %s, %s)', (    # 插入多条数据
+    ('1', 'xioaming', '18'),
+    ('2', 'zhangsan', '19'),
+    ('3', 'xioali', '20'),
+))
+
+print(cursor.rowcount)
+conn.commit()
+cursor.close()
+conn.close()
 
 # 查
-session = DB_Session()
-user_info = session.query(User).filter(User.id == '1').one()
-print(user_info.name)
-session.close()
-
+cursor = conn.cursor()
+cursor.execute('select * from user where id=%s', ('1', ))
+values = cursor.fetchall()
+print(values)
+cursor.close()
+conn.close()
 
 # 改
-session = DB_Session()
-session.query(User).filter(User.id == '1').update({'name': 'xinxin'})
-session.commit()
-session.close()
+cursor = conn.cursor()
+cursor.execute('update user set age=%s where id=%s', ('19', '1'))
 
-# # 删
-session = DB_Session()
-session.query(User).filter(User.id == '1').delete()
-session.commit()
-session.close()
+cursor.execute('select * from user')
+values = cursor.fetchall()
+print(values)
+conn.commit()
+cursor.close()
+conn.close()
+
+
+# 删
+cursor = conn.cursor()
+cursor.execute('delete from user where id=\'1\'')
+cursor.close()
+conn.commit()
+conn.close()
+
+
+
+
+
+
 
 
 
