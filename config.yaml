@@ -1,3 +1,17 @@
+cache:
+  - {ip: 'localhost', port: 26379}
+
+database:
+  url: 'mysql+mysqlconnector://xinxin:123456@localhost/test'
+
+connection:
+  glados: 'mongodb://xinxin#123456@127.0.0.1/test'
+
 safety:
-  secret: asingo5l86jigncu
-  white_list: [127.0.0.1, '::1', 192.168.1.101, 192.168.1.102, 192.168.1.103]
+  white_list:
+    - '127.0.0.1'
+    - '::1'
+    - '192.168.1.101'
+    - '192.168.1.102'
+    - '192.168.1.103'
+  secret: 'asingo5l86jigncu'
